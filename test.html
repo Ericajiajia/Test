@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+<style>
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.test-background {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+}
+.test-box {
+    width: 80%;
+    height: 80%;
+    position: fixed;
+    left: 10%;
+    top: 10%;
+    background: #ffffff;
+    animation-name: slideIn;
+    animation-duration: .4s;
+}
+@keyframes slideIn {
+    from {
+        transform: scale(.4);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+</head>
+<body>
+<input type="button" class="test-button" value="click me" />
+<div class="test-background">
+    <div class="test-box"></div>
+</div>
+</body>
+<script>
+    var button = document.getElementsByClassName('test-button')[0]
+    var back = document.getElementsByClassName('test-background')[0]
+    var box = document.getElementsByClassName('test-box')[0]
+    button.addEventListener('click', function () {
+        back.style.display = 'block'
+        box.style.display = 'block'
+    })
+    back.addEventListener('click', function (e) {
+        if(e.target.className === 'test-background') {
+            back.style.display = 'none'
+            box.style.display = 'none'
+        }
+    })
+</script>
+</html>

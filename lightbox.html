@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Lightbox</title>
+<style>
+html, body {
+    width: 100%;
+    min-width: 1100px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.title {
+    width: auto;
+    margin: 20px auto;
+    font-size: 26px;
+    font-weight: bolder;
+    text-align: center;
+}
+.container {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.picture-box {
+    width: 350px;
+    height: 230px;
+    margin: 30px 3% 0 3%;
+    border-radius: 3px;
+    overflow: hidden;
+    transition: box-shadow .2s ease-out;
+}
+.picture-box:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
+}
+.img-cursor {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.cover-back {
+    width: 100%;
+    min-width: 1100px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+.cover-page {
+    position: fixed;
+    width: 60%;
+    min-width: 820px;
+    height: 84%;
+    min-height: 536px;
+    background: #191919;
+    margin: 4% 20%;
+    border-radius: 5px;
+    animation-name: fadeIn;
+    animation-duration: .4s;
+    display: none;
+}
+@keyframes fadeIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.close {
+    width: 100%;
+    height: 10%;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+    font-size: 34px;
+    color: #ffffff;
+    font-weight: 900;
+    box-sizing: border-box;
+    cursor: default;    
+}
+.close p {
+    float: right;
+    width: 35px;
+    height: 35px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.showing {
+    width: 60%;
+    height: 50%;
+    margin: 3% auto;
+}
+.showing img {
+    width: 100%;
+    height: 100%;
+}
+.showing-number {
+    position: absolute;
+    top: 13%;
+    left: 21%;
+    font-size: 10px;
+    color: #ffffff;
+}
+.showing-left-arrow, .showing-right-arrow {
+    position: absolute;
+    width: 30px;
+    height: 44px;
+    padding: 0;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 900;
+    top: 38%;
+    text-align: center;
+    cursor: pointer;
+}
+.showing-left-arrow:hover, .showing-right-arrow:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+.showing-left-arrow {
+    left: 20%;
+}
+.showing-right-arrow {
+    right: 20%;
+}
+.showing-word {
+    margin: -2% auto;
+    font-weight: bolder;
+    font-size: 22px;
+    color: #ffffff;
+    text-align: center;
+    cursor: default;
+}
+.guide-bar {
+    width: 700px;
+    height: 100px;
+    margin: 3% auto;
+    padding: 0;
+}
+.guide-pics-container {
+    width: 604px;
+    height: 100px;
+    position: relative;
+    top: 0;
+    left: 0px;
+    overflow: hidden;
+}
+.guide-pics {
+    position: absolute;
+    top: -16px;
+    left: -40px;
+    width: 755px;
+    height: 100%;
+    transition: left .5s ease-out;
+}
+.guide-left-arrow, .guide-right-arrow {
+    position: relative;
+    width: 48px;
+    height: 50px;
+    line-height: 50px;
+    margin: 0;
+    font-size: 46px;
+    text-align: center;
+    font-weight: 900;
+    cursor: pointer;
+    color: rgba(256, 256, 256, .3);
+    transition: color .3s ease-out;
+}
+.guide-left-arrow {
+    float: left;
+    top: calc(50% - 25px);
+}
+.guide-right-arrow {
+    float: right;
+    top: calc(-50% - 25px);
+}
+.guide-left-arrow:hover, .guide-right-arrow:hover {
+    color: rgb(256, 256, 256);
+}
+.guide-picture {
+    width: 151px;
+    height: 100%;
+    float: left;
+    list-style-type: none;
+    opacity: .4;
+    transition: opacity .3s ease-out;
+}
+.guide-picture:hover {
+    opacity: .9;
+}
+.guide-picture img {
+    width: 100%;
+    height: 100%;
+}
+.guiding {
+    opacity: .9;
+}
+</style>
+</head>
+
+<body>
+<p class="title">
+    LightBox
+</p>
+<!-- 图片展示 （点击会有大图展示）-->
+<div class="container">
+    <div class="picture-box">
+        <img src="static/picture/1.jpg" alt="picture1" class="img-cursor">
+    </div>
+    <div class="picture-box">
+        <img src="static/picture/2.jpg" alt="picture2" class="img-cursor">
+    </div>
+    <div class="picture-box">
+        <img src="static/picture/3.jpg" alt="picture3" class="img-cursor">
+    </div>
+    <div class="picture-box">
+        <img src="static/picture/4.png" alt="picture4" class="img-cursor">
+    </div>
+    <div class="picture-box">
+        <img src="static/picture/5.jpg" alt="picture5" class="img-cursor">
+    </div>
+</div>
+<!-- 大图展示 -->
+<div class="cover-back">
+    <div class="cover-page">
+        <!-- 关闭按钮 -->
+        <div class="close"><p>&times;</p></div>
+        <!-- 图片区域，包含箭头和数量 -->
+        <div class="showing">
+            <p class="showing-number">1/5</p>
+            <img src="static/picture/1.jpg" alt="picture1" class="showing-picture">
+            <div class="showing-left-arrow">&#10094;</div>
+            <div class="showing-right-arrow">&#10095;</div>
+        </div>
+        <div class="showing-word"></div>
+        <!-- 所有图片预览区 -->
+        <div class="guide-bar">
+            <div class="guide-left-arrow">&#10094;</div>
+            <div class="guide-pics-container">
+                <ul class="guide-pics">
+                    <li class="guide-picture"><img src="static/picture/1.jpg" alt="picture1"></li>
+                    <li class="guide-picture"><img src="static/picture/2.jpg" alt="picture2"></li>
+                    <li class="guide-picture"><img src="static/picture/3.jpg" alt="picture3"></li>
+                    <li class="guide-picture"><img src="static/picture/4.png" alt="picture4"></li>
+                    <li class="guide-picture"><img src="static/picture/5.jpg" alt="picture5"></li>
+                </ul>
+            </div>
+            <div class="guide-right-arrow">&#10095;</div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var picBox = document.getElementsByClassName('picture-box')
+    var coverPage = document.getElementsByClassName('cover-page')[0]
+    var coverBack = document.getElementsByClassName('cover-back')[0]
+    var picArray = ['static/picture/1.jpg', 'static/picture/2.jpg', 'static/picture/3.jpg', 'static/picture/4.png', 'static/picture/5.jpg']
+    var showingPicture = document.getElementsByClassName('showing-picture')[0]
+    var showingNumber = document.getElementsByClassName('showing-number')[0]
+    var showingWord = document.getElementsByClassName('showing-word')[0]
+    var closeP = document.getElementsByClassName('close')[0].getElementsByTagName('p')[0]
+    var guidePicture = document.getElementsByClassName('guide-picture')
+    var showingLeftArrow = document.getElementsByClassName('showing-left-arrow')[0]
+    var showingRightArrow = document.getElementsByClassName('showing-right-arrow')[0]
+    var guideLeftArrow = document.getElementsByClassName('guide-left-arrow')[0]
+    var guideRightArrow = document.getElementsByClassName('guide-right-arrow')[0]
+    var guidePics = document.getElementsByClassName('guide-pics')[0]
+    var index = 0
+
+    // 封装显示图片的函数
+    var showingFunc = function (i) {
+        showingPicture.src = picArray[i]
+        showingNumber.innerHTML = i + 1 + '/5'
+        showingWord.innerHTML = picBox[i].getElementsByTagName('img')[0].alt
+        for (let j = 0; j < guidePicture.length; j++) {
+            guidePicture[j].className = 'guide-picture'
+        }
+        guidePicture[i].className = 'guide-picture guiding'
+        if(i > 3) {
+            guidePics.style.left = -40 - 151 * (i - 3) + 'px'
+        }   else if (i < 4) {
+            guidePics.style.left = -40 + 'px'
+        }
+    }
+
+    // 给每个图片添加点击事件
+    for (let i = 0; i < picBox.length; i++) {
+        console.log(i)
+        picBox[i].addEventListener('click', function () {
+            console.log(i)
+            coverBack.style.display = 'block'
+            coverPage.style.display = 'block'
+            index = i
+            showingFunc(index)
+        })
+        guidePicture[i].addEventListener('click', function () {
+            console.log(i+1+'张图片')
+            index = i
+            showingFunc(index)
+        })
+    }
+
+    // 给关闭按钮添加事件
+    closeP.addEventListener('click', function () {
+        coverPage.style.display = 'none'
+        coverBack.style.display = 'none'
+    })
+
+    // 给大图查看的左右箭头添加事件
+    showingLeftArrow.addEventListener('click', function () {
+        index -= 1
+        index = (index + 5) % 5
+        showingFunc(index)
+    })
+    showingRightArrow.addEventListener('click', function () {
+        index +=1
+        index %= 5
+        showingFunc(index)
+    })
+
+    // 给图片总览区域的左右箭头添加事件
+    guideRightArrow.addEventListener('click', function () {
+        if (guidePics.offsetLeft > -41) {
+            guidePics.style.left = guidePics.offsetLeft - 151 + 'px'
+        }
+    })
+    guideLeftArrow.addEventListener('click', function () {
+        if (guidePics.offsetLeft < -190) {
+            guidePics.style.left = guidePics.offsetLeft + 151 + 'px'
+        }
+    })
+</script>
+</html>

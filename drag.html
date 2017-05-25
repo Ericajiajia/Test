@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag</title>
+<style>
+.box1 {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    z-index: 1;
+    top: 200px;
+    left: 200px;
+    background: #000000;
+}
+</style>
+</head>
+<body>
+<div class="box1"></div>
+</body>
+<script>
+    var box1 = document.getElementsByClassName('box1')[0]
+
+    // 拖拽事件
+    var drag = function (box1) {
+        var zIndex = box1.style.zIndex
+
+        // 事件嵌套事件，事件最后要记得清除，否则进入死循环
+        box1.addEventListener('mousedown', function (e) {
+            this.style.cursor = 'pointer'
+            // 注意层级的设定
+            box1.style.zIndex = 1000
+            // 为鼠标创建事件
+            if (!e) {
+                e = window.event
+            }
+            // clientX是鼠标在可视区域的横坐标位置
+            // body的scrollLeft是可视区域左边滚动条隐藏的宽度
+            // offsetLeft是块级元素左边框相对父元素左边框的距离
+            var x = e.clientX + document.body.scrollLeft - box1.offsetLeft
+            var y = e.clientY + document.body.scrollTop - box1.offsetTop
+            box1.onmousemove = function (e) {
+                if (!e) {
+                    e = window.event
+                }
+                box1.style.left = e.clientX + document.body.scrollLeft - x + 'px'
+                box1.style.top = e.clientY + document.body.scrollTop - y + 'px'
+            }
+            box1.addEventListener('mouseup', function () {
+                // 要清除鼠标事件，如果清除mousedown，之后就不能对方块进行拖拽了 
+                // 这里用box1.onmousemove，因为清除事件removeEventListener不好写函数          
+                box1.onmousemove = null
+                box1.style.cursor = 'normal'
+                box1.style.zIndex = zIndex
+            })
+        })
+    }
+    box1.addEventListener('mousedown', drag(box1))
+</script>
+</html>
